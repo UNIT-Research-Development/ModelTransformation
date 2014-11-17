@@ -2,10 +2,13 @@ package com.unitbilisim.research.transformation;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import org.eclipse.emf.common.util.URI;
 import org.eclipse.emf.ecore.EAttribute;
 import org.eclipse.emf.ecore.EClass;
 import org.eclipse.emf.ecore.EObject;
@@ -18,6 +21,7 @@ import org.eclipse.emf.ecore.resource.impl.ResourceSetImpl;
 import org.eclipse.emf.ecore.util.BasicExtendedMetaData;
 import org.eclipse.emf.ecore.util.ExtendedMetaData;
 import org.eclipse.emf.ecore.xmi.XMIResource;
+import org.eclipse.emf.ecore.xmi.impl.XMIResourceFactoryImpl;
 
 import com.google.common.collect.HashMultimap;
 import com.unitbilisim.research.adt.Edge;
@@ -50,6 +54,7 @@ public class ConvertEcore2Graph {
 	public static void main(String[] args) throws IOException {
 		// TODO Auto-generated method stub
 
+		/*
 		EPackage.Registry reg = EPackage.Registry.INSTANCE;
 		EPackage m = reg.getEPackage("my");
 	
@@ -83,40 +88,58 @@ public class ConvertEcore2Graph {
 */
 		
 		////////////
-		/*
+
 		URI uri = URI.createURI("model/Collection.xmi");
 
-				try {
+		try {
 
-					ResourceSet resourceSet = new ResourceSetImpl();
+			ResourceSet resourceSet = new ResourceSetImpl();
 
-					// register UML
-					Map packageRegistry = resourceSet.getPackageRegistry();
-					packageRegistry.put(UMLPackage.eNS_URI, UMLPackage.eINSTANCE);
+			// register UML
+			Map packageRegistry = resourceSet.getPackageRegistry();
+			packageRegistry.put(list.ListPackage.eNS_URI, list.ListPackage.eINSTANCE);
 
-					// Register XML resource as UMLResource.Factory.Instance
-					Map extensionFactoryMap = Resource.Factory.Registry.INSTANCE
-							.getExtensionToFactoryMap();
-					extensionFactoryMap.put(UMLResource.FILE_EXTENSION,
-							UMLResource.Factory.INSTANCE);
-					extensionFactoryMap.put("xmi", UMLResource.Factory.INSTANCE);
+			// Register XML resource as UMLResource.Factory.Instance
+			Map extensionFactoryMap = Resource.Factory.Registry.INSTANCE.getExtensionToFactoryMap();
+			extensionFactoryMap.put("xmi", new XMIResourceFactoryImpl());
 
-					Resource resource = (Resource) resourceSet.createResource(uri);
+			Resource resource = (Resource) resourceSet.createResource(uri);
 
-					// try to load the file into resource
-					resource.load(null);
-					System.out.println("XMI Resource has "
-							+ resource.getContents().size() + " objects.");
-					for (EObject obj : resource.getContents()) {
+			
+			// try to load the file into resource
+			resource.load(null);
+			
+			//resource.save(System.out, Collections.EMPTY_MAP);
+			
+			
+			Iterator<EObject> resourceObjects = resource.getAllContents();	
+			
+			while (resourceObjects.hasNext()) {
+				Object o = resourceObjects.next();
+			
+				System.out.println(o.toString());
+				
+				
+				
+			} // End while
+			/*
+			System.out.println("XMI Resource has "
+					+ resource.getContents().size() + " objects.");
+			for (EObject obj : resource.getContents()) {
 
-						System.out.println(obj.toString());
-					}
-				}// end of try
-				catch (NullPointerException | IOException e) {
-					e.printStackTrace();
-				}
+				System.out.println(obj.toString());
+				
+				
+			}
+			
+			*/
+			
+		}// end of try
+		catch (NullPointerException | IOException e) {
+			e.printStackTrace();
+		}
 		
-		*/
+		
 		//MyPackage.eINSTANCE.eClass();
 
 		/*
